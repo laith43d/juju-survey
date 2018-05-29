@@ -1,0 +1,29 @@
+version: "2"
+
+services:
+  db:
+    env_file:
+      - ".env"
+    image: "mysql"
+    volumes:
+      - "db:/var/lib/mysql/data"
+
+  web:
+    build: "."
+    command: >
+      gunicorn -b 0.0.0.0:8000
+        --access-logfile -
+        --reload
+        "cli.app:main"
+    depends_on:
+      - "postgres"
+    env_file:
+      - ".env"
+    ports:
+      - "8000:8000"
+    volumes:
+      - ".:/app"
+
+
+volumes:
+  db: {}
