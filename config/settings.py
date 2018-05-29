@@ -35,8 +35,8 @@ Model = db.Model
 app.config['JWT_ACCESS_LIFESPAN'] = {'hours': 24}
 app.config['JWT_REFRESH_LIFESPAN'] = {'days': 30}
 
-from models import User
-guard = Praetorian(app = app, user_class = User)
+# from models import User
+# guard = Praetorian(app = app, user_class = User)
 
 # The User class argument supplied during initialization
 # represents the class that should be used to check for

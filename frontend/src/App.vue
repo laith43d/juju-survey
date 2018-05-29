@@ -6,14 +6,13 @@
 </template>
 
 <script>
-  import AppHeader from '@/components/Header'
-
-  export default {
-    name: 'App',
-    components: {AppHeader}
-  }
+import AppHeader from '@/components/Header'
+export default {
+  name: 'App',
+  components: { AppHeader }
+}
 </script>
 
 <style lang="scss">
-  @import '~bulma/bulma';
+@import '~bulma/bulma'
 </style>

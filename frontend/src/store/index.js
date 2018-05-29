@@ -1,68 +1,67 @@
 import Vue from 'vue'
-import vuex from 'vuex'
+import Vuex from 'vuex'
+// imports of AJAX functions will go here
+import { fetchSurvey, fetchSurveys, postNewSurvey, saveSurveyResponse } from '@/api'
 
-import { fetchSurveys, fetchSurvey, saveSurveyResponse } from '../api'
-
-Vue.use(vuex)
+Vue.use(Vuex)
 
 const state = {
-
+  // single source of data
   surveys: [],
-  currentSurvey: []
+  currentSurvey: {}
 }
 
 const actions = {
-
-  loadSurveys(context) {
+  // asynchronous operations
+  loadSurveys (context) {
     return fetchSurveys()
       .then((response) => context.commit('setSurveys', {surveys: response}))
   },
-
   loadSurvey (context, {id}) {
     return fetchSurvey(id)
       .then((response) => context.commit('setSurvey', {survey: response}))
   },
-
-  addSurveyResponse(context) {
+  addSurveyResponse (context) {
     return saveSurveyResponse(context.state.currentSurvey)
+  },
+  submitNewSurvey (context, survey) {
+    return postNewSurvey(survey)
   }
-
-
 }
 
 const mutations = {
-
-  setSurveys(state, payload) {
+  // isolated data mutations
+  setSurveys (state, payload) {
     state.surveys = payload.surveys
   },
-
-  setSurvey(state, payload) {
+  setSurvey (state, payload) {
     const nQuestions = payload.survey.questions.length
-    for(let i=0; i<nQuestions; i++) {
+    for (let i = 0; i < nQuestions; i++) {
       payload.survey.questions[i].choice = null
     }
     state.currentSurvey = payload.survey
   },
-
-  setChoice(state, payload) {
+  setChoice (state, payload) {
     const {questionId, choice} = payload
     const nQuestions = state.currentSurvey.questions.length
-    for (let i = 0; i<nQuestions; i++) {
+    for (let i = 0; i < nQuestions; i++) {
       if (state.currentSurvey.questions[i].id === questionId) {
-        state.currentSurvey.question[i].choice = choice
+        state.currentSurvey.questions[i].choice = choice
         break
       }
     }
   }
-
 }
 
 const getters = {
-
+  // reusable data accessors
 }
 
-const store = new vuex.Store({
-  state, actions, mutations, getters
+const store = new Vuex.Store({
+  state,
+  actions,
+  mutations,
+  getters
 })
 
 export default store

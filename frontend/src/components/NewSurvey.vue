@@ -1,5 +1,5 @@
 <template>
-      <div>
+  <div>
     <section class="hero is-primary">
       <div class="hero-body">
         <div class="container has-text-centered">
@@ -27,15 +27,40 @@
           <div class="column is-half is-offset-one-quarter">
 
             <div class="name" v-show="step === 'name'">
-              <h2 class='is-large'>Add name</h2>
+              <div class="field">
+                <label class="label  is-large" for="name">Survey name:</label>
+                <div class="control">
+                  <input type="text" class="input is-large" id="name" v-model="name">
+                </div>
+              </div>
             </div>
 
             <div class="questions" v-show="step === 'questions'">
-              <h2>Add Questions</h2>
+              <new-question v-on:questionComplete="appendQuestion"/>
             </div>
 
             <div class="review" v-show="step === 'review'">
-              <h2>Review and Submit</h2>
+              <ul>
+                <li class="question" v-for="(question, qIdx) in questions" :key="`question-${qIdx}`">
+                  <div class="title">
+                    {{ question.question }}
+                    <span class="icon is-medium is-pulled-right delete-question"
+                      @click.stop="removeQuestion(question)">
+                      <i class="fa fa-times" aria-hidden="true"></i>
+                    </span>
+                  </div>
+                  <ul>
+                    <li v-for="(choice , cIdx) in question.choices" :key="`choice-${cIdx}`">
+                      {{ cIdx + 1 }}. {{ choice }}
+                    </li>
+                  </ul>
+                </li>
+              </ul>
+
+              <div class="control">
+                <a class="button is-large is-primary" @click="submitSurvey">Submit</a>
+              </div>
+
             </div>
 
           </div>
@@ -46,16 +71,44 @@
 </template>
 
 <script>
-  export default {
-    name: 'NewSurvey',
-    data() {
-      return {
-        step: 'name'
-      }
+import NewQuestion from '@/components/NewQuestion'
+export default {
+  components: { NewQuestion },
+  data () {
+    return {
+      step: 'name',
+      name: '',
+      questions: []
+    }
+  },
+  methods: {
+    appendQuestion (newQuestion) {
+      this.questions.push(newQuestion)
+    },
+    removeQuestion (question) {
+      const idx = this.questions.findIndex(q => q.question === question.question)
+      this.questions.splice(idx, 1)
+    },
+    submitSurvey () {
+      this.$store.dispatch('submitNewSurvey', {
+        name: this.name,
+        questions: this.questions
+      }).then(() => this.$router.push('/'))
     }
   }
+}
 </script>
 
-<style scoped>
-
+<style>
+.question {
+  margin: 10px 20px 25px 10px;
+}
+.delete-question {
+  cursor: pointer;
+  padding: 10px;
+}
+.delete-question:hover {
+  background-color: lightgray;
+  border-radius: 50%;
+}
 </style>

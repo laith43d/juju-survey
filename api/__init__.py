@@ -1,6 +1,7 @@
 from config.settings import app
 
 
-from api.User import UserView
-UserView.register(app)
+
+from api.Survey import SurveyView
+SurveyView.register(app)
 

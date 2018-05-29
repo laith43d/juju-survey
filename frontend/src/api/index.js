@@ -1,3 +1,4 @@
+
 const surveys = [{
   id: 1,
   name: 'Dogs',
@@ -6,18 +7,16 @@ const surveys = [{
     id: 1,
     text: 'What is your favorite dog?',
     choices: [
-      {id: 1, text: 'Beagle', selected: 0},
-      {id: 2, text: 'Labrador', selected: 0},
-      {id: 3, text: 'Rottweiler', selected: 0}
-    ]
+      { id: 1, text: 'Beagle', selected: 0 },
+      { id: 2, text: 'Labrador', selected: 0 },
+      { id: 3, text: 'Rottweiler', selected: 0 }]
   }, {
     id: 2,
     text: 'What is your second favorite dog?',
     choices: [
-      {id: 5, text: 'Beagle', selected: 0},
-      {id: 6, text: 'Labrador', selected: 0},
-      {id: 7, text: 'Rottweiler', selected: 0}
-    ]
+      { id: 5, text: 'Beagle', selected: 0 },
+      { id: 6, text: 'Labrador', selected: 0 },
+      { id: 7, text: 'Rottweiler', selected: 0 }]
   }]
 }, {
   id: 2,
@@ -27,18 +26,16 @@ const surveys = [{
     id: 5,
     text: 'What is your favorite car?',
     choices: [
-      {id: 17, text: 'Corvette', selected: 0},
-      {id: 18, text: 'Mustang', selected: 0},
-      {id: 19, text: 'Camaro', selected: 0}
-    ]
+      { id: 17, text: 'Corvette', selected: 0 },
+      { id: 18, text: 'Mustang', selected: 0 },
+      { id: 19, text: 'Camaro', selected: 0 }]
   }, {
     id: 6,
     text: 'What is your second favorite car?',
     choices: [
-      {id: 21, text: 'Corvette', selected: 0},
-      {id: 22, text: 'Mustang', selected: 0},
-      {id: 23, text: 'Camaro', selected: 0}
-    ]
+      { id: 21, text: 'Corvette', selected: 0 },
+      { id: 22, text: 'Mustang', selected: 0 },
+      { id: 23, text: 'Camaro', selected: 0 }]
   }]
 }]
 
@@ -72,6 +69,15 @@ export function saveSurveyResponse (surveyResponse) {
         const choice = question.find(c => c.id === parseInt(responseQ.choice))
         choice.selected++
       })
+      resolve()
+    }, 300)
+  })
+}
+
+export function postNewSurvey (survey) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      console.log('Saving survey ...', survey)
       resolve()
     }, 300)
   })
