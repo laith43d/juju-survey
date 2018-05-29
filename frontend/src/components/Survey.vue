@@ -59,20 +59,16 @@
 </template>
 
 <script>
-  import { fetchSurvey, saveSurveyResponse } from '@/api'
+  import {fetchSurveys, fetchSurvey, saveSurveyResponse} from '../api'
 
   export default {
     data () {
       return {
-        survey: {},
         currentQuestion: 0
       }
     },
     beforeMount () {
-      return fetchSurvey(parseInt(this.$route.params.id))
-        .then((response) => {
-          this.survey = response
-        })
+      this.$store.dispatch('loadSurvey', {id: parseInt(this.$route.params.id)})
     },
     methods: {
       goToNextQuestion () {
@@ -90,7 +86,7 @@
         }
       },
       handleSubmit () {
-        saveSurveyResponse(this.survey)
+        this.$store.dispatch('addSurveyResponse')
           .then(() => this.$router.push('/'))
       }
     },
@@ -102,6 +98,19 @@
           return numQuestions === numCompleted
         }
         return false
+      },
+      survey () {
+        return this.$store.currentSurvey
+      },
+      selectChoice: {
+        get() {
+          const question = this.survey.questions[this.currentQuestion]
+          return question.choice
+        },
+        set() {
+          const qustion = this.survey.questions[this.currentQuestion]
+          this.$store.commit('setChoice', {questionId: question.id, choice: value})
+        }
       }
     }
   }
