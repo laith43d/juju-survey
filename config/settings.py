@@ -5,10 +5,13 @@ from flask import Flask
 from flask_cors import CORS
 from flask_limiter import Limiter
 from flask_limiter.util import get_remote_address
-from flask_orator import Orator
-from flask_praetorian import Praetorian
+from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import scoped_session, sessionmaker
+from sqlalchemy_mixins import ReprMixin, AllFeaturesMixin
 
-from config.static_config import LOG_DIR
+from config.static_config import LOG_DIR, SQLALCHEMY_DATABASE_URI
 
 # APP Initialization --------------------------------------
 
@@ -26,8 +29,30 @@ limit = Limiter(
 
 # DB Init -------------------------------------------------
 
-db = Orator(app)
-Model = db.Model
+# db = Orator(app)
+# Model = db.Model
+
+db = SQLAlchemy(app)
+# Model = db.Model
+# from sqlalchemy_mixins import SessionMixin
+# SessionMixin.set_session(db.session)
+
+#################### setup ######################
+Base = declarative_base()
+
+# we also use ReprMixin which is optional
+class Model(Base, AllFeaturesMixin):
+    __abstract__ = True
+    pass
+
+#################### setup ORM ######################
+engine = create_engine(SQLALCHEMY_DATABASE_URI, echo=True)
+# autocommit=True - it's to make you see data in 3rd party DB view tool
+session = scoped_session(sessionmaker(bind=engine, autocommit=True))
+
+# setup base model: inject session so it can be accessed from model
+Model.set_session(session)
+
 
 
 # Jwt -----------------------------------------------------
