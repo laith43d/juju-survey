@@ -2,7 +2,7 @@ from flask import request
 from flask_classful import FlaskView as Resource, route
 from flask_orator import jsonify
 
-from models import Choice, Survey, Question
+from models import Survey, Question, Choice
 
 
 class SurveyView(Resource):
@@ -11,30 +11,33 @@ class SurveyView(Resource):
     def all(self):
         if request.method == 'GET':
             surveys = Survey.all()
-            return jsonify([s.to_dict() for s in surveys])
+            questions = Question.all()
+            choices = Choice.all()
+            return jsonify({'surveys': [s.to_dict() for s in surveys],
+                           'questions': [q.to_dict() for q in questions],
+                           'choices': [c.to_dict() for c in choices]})
         elif request.method == 'POST':
             data = request.get_json()
             survey = Survey(name = data['name'])
-            questions = []
+            survey.save()
             for q in data['questions']:
                 question = Question(text = q['text'])
-                question.choices = [Choice(text = c) for c in q['choices']]
-                questions.append(question)
-            survey.questions = questions
-            survey.save()
+                survey.questions().save(question)
+                question.save()
+                [question.choices().save(Choice(text = c['text'])) for c in q['choices']]
             return jsonify(survey.to_dict()), 201
 
 
     @route('/<int:id_>', methods = ('GET', 'PUT'))
     def one(self, id_):
         if request.method == 'GET':
-            survey = Survey.query.get(id_)
+            survey = Survey.find(id_)
             return jsonify(survey.to_dict())
         elif request.method == 'PUT':
             data = request.get_json()
             for q in data['questions']:
-                choice = Choice.query.get(q['choice'])
-                choice.selected = choice.selected + 1
-                choice.save()
-            survey = Survey.find(data['id'])
+                choice_selected = Choice.where('id', q['choice']).first()
+                choice_selected.selected += 1
+                choice_selected.save()
+            survey = Survey.find(data['survey_id'])
             return jsonify(survey.to_dict()), 201

@@ -1,3 +1,3 @@
-from models.Survey import Survey
-from models.Question import Question
-from models.Choice import Choice
+from .surveys import Survey
+from .questions import Question
+from .choices import Choice

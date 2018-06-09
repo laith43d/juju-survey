@@ -3,7 +3,7 @@ Content-Type: application/json
 
 ###
 
-GET http://localhost:5000/survey/1
+GET http://localhost:5000/survey/18
 Content-Type: application/json
 
 ###
@@ -11,11 +11,10 @@ PUT http://localhost:5000/survey/9
 Content-Type: application/json
 
 {
-    "id": 1,
-    "name": "Cards",
+    "survey_id": 18,
     "questions": [
-        {"id": 1, "choice": 1},
-        {"id": 2, "choice": 5}
+        {"question_id": 13, "choice": 14},
+        {"question_id": 14, "choice": 16}
     ]
 }
 
@@ -25,19 +24,19 @@ POST http://localhost:5000/survey
 Content-Type: application/json
 
 {
-    "name": "Cars",
+    "name": "Dogs",
     "questions": [{
-        "text": "What is your favorite car?",
+        "text": "What is your favorite dog?",
         "choices": [
-            { "text": "Corvette" },
-            { "text": "Mustang" },
-            { "text": "Camaro" }]
+            { "text": "Bull" },
+            { "text": "German" },
+            { "text": "Street" }]
     }, {
-        "text": "What is your second favorite car?",
+        "text": "What is your second favorite dog?",
         "choices": [
-            { "text": "Corvette" },
-            { "text": "Mustang" },
-            { "text": "Camaro" }]
+            { "text": "Bull" },
+            { "text": "German" },
+            { "text": "Street" }]
     }]
 }
 
