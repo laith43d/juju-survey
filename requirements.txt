@@ -73,7 +73,7 @@ pyaml==16.12.2
 pycparser==2.18
 pydash==4.5.0
 Pygments==2.2.0
-PyJWT==1.6.3
+PyJWT==2.4.0
 pylev==1.3.0
 PyMySQL==0.8.1
 python-dateutil==2.7.2
