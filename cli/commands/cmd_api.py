@@ -38,7 +38,7 @@ def make_api(api_name, model):
                     f"class {api_name.capitalize()}View(Resource):\n"
                     f"    pass")
 
-        with open(f'api/__init__.py', 'a+') as f:
+        with open('api/__init__.py', 'a+') as f:
             f.write(
                 f'from api.{api_name.capitalize()} import {api_name.capitalize()}View\n')
             f.write(
