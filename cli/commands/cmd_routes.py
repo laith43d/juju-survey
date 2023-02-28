@@ -25,7 +25,7 @@ def list_():
 
         output[rule.endpoint] = route
 
-    endpoint_padding = max(len(endpoint) for endpoint in output.keys()) + 2
+    endpoint_padding = max(len(endpoint) for endpoint in output) + 2
 
     for key in sorted(output):
         if 'debugtoolbar' not in key and 'debug_toolbar' not in key:

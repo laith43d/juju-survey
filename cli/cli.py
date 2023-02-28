@@ -25,17 +25,17 @@ class Context(object):
 
 
 pass_context = click.make_pass_decorator(Context, ensure = True)
-cmd_folder = os.path.join(BASE_DIR + '/cli', 'commands')
+cmd_folder = os.path.join(f'{BASE_DIR}/cli', 'commands')
 
 
 class CLI(click.MultiCommand):
 
     def list_commands(self, ctx):
-        rv = []
-        for filename in os.listdir(cmd_folder):
-            if filename.endswith('.py') and \
-                    filename.startswith('cmd_'):
-                rv.append(filename[4:-3])
+        rv = [
+            filename[4:-3]
+            for filename in os.listdir(cmd_folder)
+            if filename.endswith('.py') and filename.startswith('cmd_')
+        ]
         rv.sort()
         return rv
 
@@ -43,7 +43,12 @@ class CLI(click.MultiCommand):
         try:
             if sys.version_info[0] == 2:
                 name = name.encode('ascii', 'replace')
-            mod = __import__('cli.commands.cmd_' + name, locals = None, globals = None, fromlist = ['cli'])
+            mod = __import__(
+                f'cli.commands.cmd_{name}',
+                locals=None,
+                globals=None,
+                fromlist=['cli'],
+            )
         except ImportError:
             return
         return mod.cli
